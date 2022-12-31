@@ -1,0 +1,88 @@
+﻿@*@page "/login"
+@    using Jorda.Client.Common.Services.Goal.Models.Requests
+
+@inject IAuthService _authService
+@inject NavigationManager NavigationManager
+
+
+<EditForm Model="@_tokenModel" OnValidSubmit="SubmitAsync">
+    <FluentValidationValidator @ref="_fluentValidationValidator" DisableAssemblyScanning="@true" />
+    <ValidationSummary />
+    <div class="form-group">
+        <label>Email</label>
+        <InputText @bind-Value="_tokenModel.Email" type="text" class="form-control" />
+        <ValidationMessage For="@(() => _tokenModel.Email)" />
+    </div>
+    <div class="form-group">
+        <label>Password</label>
+        <InputText @bind-Value="_tokenModel.Password" type="password" class="form-control" />
+        <ValidationMessage For="@(() => _tokenModel.Password)" />
+    </div>
+    <button class="btn btn-primary">
+    </button>
+</EditForm>
+
+
+
+
+@code 
+{
+    private TokenRequest _tokenModel = new();
+
+    private FluentValidationValidator _fluentValidationValidator;
+
+    private ValidationMessageStore _messageStore;
+
+    protected override void OnInitialized()
+    {
+        _messageStore = new(editContext);
+        if (_authService.Token != null)
+        {
+            NavigationManager.NavigateTo("");
+        }
+    }
+
+    private async Task SubmitAsync()
+    {
+
+        _messageStore?.Add(() => _tokenModel.Email, "Select at least one.");
+
+        await Task.Run(()=> { });
+
+        //await _authService.Login(_tokenModel);
+
+        //_messageStore?.Add(() => _tokenModel.Email, "Select at least one.");
+
+
+        //if (!result.Succeeded)
+        //{
+        //    foreach (var message in result.Messages)
+        //    {
+        //        _snackBar.Add(message, Severity.Error);
+        //    }
+        //}
+    }
+
+
+
+
+
+
+
+
+
+
+    //private async Task SubmitAsync()
+    //{
+    //    var result = await _authenticationManager.Login(_tokenModel);
+    //    if (!result.Succeeded)
+    //    {
+    //        foreach (var message in result.Messages)
+    //        {
+    //            _snackBar.Add(message, Severity.Error);
+    //        }
+    //    }
+    //}
+
+    
+}*@
